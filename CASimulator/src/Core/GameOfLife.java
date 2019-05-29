@@ -23,6 +23,7 @@ public class GameOfLife extends CellularAutomaton{
         super(grid);
     }
 
+    @Override
     public void generateAll(int generationCount) {
         for (int it = 0; it < generationCount; it++) {
             for (int i = 1; i < mainGrid.gameGrid.length - 1; i++) {
@@ -44,6 +45,7 @@ public class GameOfLife extends CellularAutomaton{
         }
     }
 
+    @Override
     public Cell cellState(int i, int j) {
         int aliveNumber = 0;
         for (int a = -1; a < 2; a++) {
@@ -68,4 +70,14 @@ public class GameOfLife extends CellularAutomaton{
             }
         }
     }
+   
+    @Override
+    public void clearGrid(Cell[][] gridToClear) {
+        for (int i = 0; i < gridToClear.length; i++) {
+            for (int j = 0; j < gridToClear[i].length; j++) {
+                gridToClear[i][j] = Cell.DEAD;
+            }
+        }
+    }
+    
 }
