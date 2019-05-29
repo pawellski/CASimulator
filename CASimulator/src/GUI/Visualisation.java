@@ -5,15 +5,30 @@
  */
 package GUI;
 
+import Core.CellularAutomaton;
+import Core.WireWorld;
+import java.awt.Graphics;
+import java.awt.Image;
+
 /**
  *
  * @author Paweł
  */
 public class Visualisation extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Visualisation
-     */
+    private int numberHorizontalCalls = 15;
+    private int numberVerticalCalls = 10;
+
+    private int widthCell;
+    private int heightCell;
+
+    private char typeOfGame = 'W';
+    private CellularAutomaton currentGame = new WireWorld(numberVerticalCalls + 2, numberHorizontalCalls + 2);
+
+    Graphics paintGrid;
+    Image mainImage;
+    
+    
     public Visualisation() {
         initComponents();
     }
@@ -320,14 +335,14 @@ public class Visualisation extends javax.swing.JFrame {
                         .addComponent(jSeparatorMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                                .addComponent(jRadioButtonWire, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jRadioButtonElectronHead, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jRadioButtonElectronHead, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jRadioButtonWire))
                             .addComponent(jRadioButtonElectronTail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(33, 59, Short.MAX_VALUE))
+                .addGap(33, 41, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonFilePath, jButtonLoad, jTextFieldFileName});
