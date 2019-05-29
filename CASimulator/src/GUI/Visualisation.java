@@ -14,7 +14,7 @@ import java.awt.Image;
  *
  * @author Paweł
  */
-public class Visualisation extends javax.swing.JFrame {
+public class Visualisation extends javax.swing.JFrame implements Observator{
 
     private int numberHorizontalCalls = 15;
     private int numberVerticalCalls = 10;
@@ -31,6 +31,10 @@ public class Visualisation extends javax.swing.JFrame {
     
     public Visualisation() {
         initComponents();
+    }
+    
+    public void onUpdate(){
+        
     }
 
     /**
