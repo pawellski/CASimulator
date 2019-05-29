@@ -15,6 +15,10 @@ public class Grid {
     private int height;
     public Cell[][] gameGrid;
 
+    public Grid(){
+        
+    }
+    
     public Grid(int hei, int wi) {
         height = hei;
         width = wi;
