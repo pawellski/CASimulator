@@ -5,30 +5,54 @@
  */
 package Core;
 
+import GUI.Observator;
 import Grid.Cell;
 import Grid.Grid;
+import java.util.ArrayList;
 
 /**
  *
  * @author Paweł
  */
-public abstract class CellularAutomaton {
+public abstract class CellularAutomaton implements Observable {
 
     public Grid mainGrid;
     protected Grid utilGrid;
+
+    private ArrayList<Observator> observers;
+
+    @Override
+    public void addObservator(Observator o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObservator(Observator o) {
+        int index = observers.indexOf(o);
+        observers.remove(index);
+    }
+
+    @Override
+    public void notifyObservator() {
+        for (Observator o : observers) {
+            o.onUpdate();
+        }
+    }
 
     public CellularAutomaton(int wi, int hei) {
         mainGrid = new Grid(hei, wi);
         utilGrid = new Grid(hei, wi);
         clearGrid(mainGrid.gameGrid);
+        observers = new ArrayList<Observator>();
     }
 
     public CellularAutomaton(Cell[][] grid) {
         mainGrid = new Grid();
         mainGrid.gameGrid = grid;
         utilGrid = new Grid(mainGrid.gameGrid.length, mainGrid.gameGrid[0].length);
+        observers = new ArrayList<Observator>();
     }
-    
+
     public void changeGrid() {
         for (int i = 0; i < mainGrid.gameGrid.length; i++) {
             for (int j = 0; j < mainGrid.gameGrid[i].length; j++) {
@@ -45,7 +69,7 @@ public abstract class CellularAutomaton {
             System.out.println();
         }
     }
-    
+
     public abstract void clearGrid(Cell[][] gridToClear);
 
     public abstract void generateAll(int generationCount);
