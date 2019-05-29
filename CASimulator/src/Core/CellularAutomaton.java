@@ -12,7 +12,7 @@ import Grid.Grid;
  *
  * @author Paweł
  */
-public class CellularAutomaton {
+public abstract class CellularAutomaton {
 
     public Grid mainGrid;
     protected Grid utilGrid;
@@ -28,15 +28,7 @@ public class CellularAutomaton {
         mainGrid.gameGrid = grid;
         utilGrid = new Grid(mainGrid.gameGrid.length, mainGrid.gameGrid[0].length);
     }
-
-    public void clearGrid(Cell[][] gridToClear) {
-        for (int i = 0; i < gridToClear.length; i++) {
-            for (int j = 0; j < gridToClear[i].length; j++) {
-                gridToClear[i][j] = Cell.DEAD;
-            }
-        }
-    }
-
+    
     public void changeGrid() {
         for (int i = 0; i < mainGrid.gameGrid.length; i++) {
             for (int j = 0; j < mainGrid.gameGrid[i].length; j++) {
@@ -53,5 +45,10 @@ public class CellularAutomaton {
             System.out.println();
         }
     }
+    
+    public abstract void clearGrid(Cell[][] gridToClear);
 
+    public abstract void generateAll(int generationCount);
+
+    public abstract Cell cellState(int i, int j);
 }
