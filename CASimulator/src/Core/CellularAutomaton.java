@@ -39,7 +39,7 @@ public abstract class CellularAutomaton implements Observable {
         }
     }
 
-    public CellularAutomaton(int wi, int hei) {
+    public CellularAutomaton(int hei, int wi) {
         mainGrid = new Grid(hei, wi);
         utilGrid = new Grid(hei, wi);
         clearGrid(mainGrid.gameGrid);
