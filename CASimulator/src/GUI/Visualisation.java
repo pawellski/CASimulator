@@ -7,6 +7,8 @@ package GUI;
 
 import Core.CellularAutomaton;
 import Core.WireWorld;
+import Grid.Cell;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -14,7 +16,7 @@ import java.awt.Image;
  *
  * @author Paweł
  */
-public class Visualisation extends javax.swing.JFrame implements Observator{
+public class Visualisation extends javax.swing.JFrame implements Observator {
 
     private int numberHorizontalCalls = 15;
     private int numberVerticalCalls = 10;
@@ -27,14 +29,60 @@ public class Visualisation extends javax.swing.JFrame implements Observator{
 
     Graphics paintGrid;
     Image mainImage;
-    
-    
+
     public Visualisation() {
         initComponents();
+        System.out.println(currentGame.getClass().getName());
     }
-    
-    public void onUpdate(){
-        
+
+    public void onUpdate() {
+        widthCell = mainPanel.getWidth() / numberHorizontalCalls;
+        heightCell = mainPanel.getHeight() / numberVerticalCalls;
+        paintGrid.setColor(mainPanel.getForeground());
+        paintGrid.fillRect(0, 0, mainPanel.getWidth(), mainPanel.getHeight());
+
+        switch (currentGame.getClass().getName()) {
+            case "Core.WireWorld":
+                for (int i = 0; i < numberVerticalCalls; i++) {
+                    for (int j = 0; j < numberHorizontalCalls; j++) {
+                        if (currentGame.getCellFromGrid(i + 1, j + 1) == Cell.ALIVE) {
+                            paintGrid.setColor(Color.WHITE);
+                            paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
+                        } else {
+                            paintGrid.setColor(Color.BLACK);
+                            paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
+                        }
+                    }
+                }
+                break;
+            case "Core.GameOfLife":
+                for (int i = 0; i < numberVerticalCalls; i++) {
+                    for (int j = 0; j < numberHorizontalCalls; j++) {
+                        switch (currentGame.getCellFromGrid(i + 1, j + 1)) {
+                            case EMPTY:
+                                paintGrid.setColor(Color.BLACK);
+                                paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
+                                break;
+                            case WIRE:
+                                paintGrid.setColor(Color.YELLOW);
+                                paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
+                                break;
+                            case EHEAD:
+                                paintGrid.setColor(Color.RED);
+                                paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
+                                break;
+                            case ETAIL:
+                                paintGrid.setColor(Color.BLUE);
+                                paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
+                                break;
+                        }
+                    }
+                }
+                break;
+        }
+
+        mainPanel.getGraphics().drawImage(mainImage, 0, 0, mainPanel);
+        System.out.println(mainPanel.getHeight() + " xxxxx " + mainPanel.getWidth());
     }
 
     /**
