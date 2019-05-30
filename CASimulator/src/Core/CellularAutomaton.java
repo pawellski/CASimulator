@@ -52,9 +52,13 @@ public abstract class CellularAutomaton implements Observable {
         utilGrid = new Grid(mainGrid.gameGrid.length, mainGrid.gameGrid[0].length);
         observers = new ArrayList<Observator>();
     }
-    
-    public Cell getCellFromGrid(int i, int j){
+
+    public Cell getCellFromGrid(int i, int j) {
         return mainGrid.gameGrid[i][j];
+    }
+
+    public void setCellFromGrid(int i, int j, Cell state) {
+        this.mainGrid.gameGrid[i][j] = state;
     }
 
     public void changeGrid() {
