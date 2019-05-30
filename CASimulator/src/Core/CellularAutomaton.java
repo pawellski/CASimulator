@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public abstract class CellularAutomaton implements Observable {
 
-    public Grid mainGrid;
+    protected Grid mainGrid;
     protected Grid utilGrid;
 
     private ArrayList<Observator> observers;
@@ -51,6 +51,10 @@ public abstract class CellularAutomaton implements Observable {
         mainGrid.gameGrid = grid;
         utilGrid = new Grid(mainGrid.gameGrid.length, mainGrid.gameGrid[0].length);
         observers = new ArrayList<Observator>();
+    }
+    
+    public Cell getCellFromGrid(int i, int j){
+        return mainGrid.gameGrid[i][j];
     }
 
     public void changeGrid() {
