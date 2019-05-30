@@ -64,11 +64,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                                 paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
                                 break;
                             case EHEAD:
-                                paintGrid.setColor(Color.RED);
+                                paintGrid.setColor(Color.BLUE);
                                 paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
                                 break;
                             case ETAIL:
-                                paintGrid.setColor(Color.BLUE);
+                                paintGrid.setColor(Color.RED);
                                 paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
                                 break;
                         }
@@ -144,6 +144,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
         mainPanel.setBackground(new java.awt.Color(0, 0, 0));
         mainPanel.setPreferredSize(new java.awt.Dimension(600, 400));
+        mainPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mainPanelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -441,6 +446,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                 jPanelYellow.setVisible(false);
                 jPanelBlue.setVisible(false);
                 jPanelRed.setVisible(false);
+                onUpdate();
                 break;
             case "Core.GameOfLife":
                 currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
@@ -451,9 +457,51 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                 jPanelYellow.setVisible(true);
                 jPanelBlue.setVisible(true);
                 jPanelRed.setVisible(true);
+                onUpdate();
                 break;
         }
     }//GEN-LAST:event_jToggleButtonGoLWWMouseClicked
+
+    private void mainPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainPanelMouseClicked
+        int cellDimX = evt.getX() / widthCell;
+        int cellDimY = evt.getY() / heightCell;
+        switch (currentGame.getClass().getName()) {
+            case "Core.WireWorld":
+                if (jRadioButtonWire.isSelected()) {
+                    if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.WIRE) {
+                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
+                    } else {
+                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.WIRE);
+                    }
+                    onUpdate();
+
+                } else if (jRadioButtonElectronHead.isSelected()) {
+                    if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.EHEAD) {
+                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
+                    } else {
+                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EHEAD);
+                    }
+                    onUpdate();
+
+                } else if (jRadioButtonElectronTail.isSelected()) {
+                    if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.ETAIL) {
+                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
+                    } else {
+                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.ETAIL);
+                    }
+                    onUpdate();
+                }
+                break;
+            case "Core.GameOfLife":
+                if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.ALIVE) {
+                    currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.DEAD);
+                } else {
+                    currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.ALIVE);
+                }
+                onUpdate();
+                break;
+        }
+    }//GEN-LAST:event_mainPanelMouseClicked
 
     /**
      * @param args the command line arguments
