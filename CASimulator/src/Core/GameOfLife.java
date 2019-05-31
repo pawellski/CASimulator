@@ -12,8 +12,6 @@ import Grid.Cell;
  * @author Jakub
  */
 public class GameOfLife extends CellularAutomaton{
-    
-    /*ArrayList<Observator> obserwatorzy;*/
 
     public GameOfLife(int wi, int hei) {
         super(wi, hei);
@@ -31,13 +29,12 @@ public class GameOfLife extends CellularAutomaton{
                     utilGrid.gameGrid[i][j] = cellState(i, j);
                 }
             }
-            System.out.println("Plansza po " + (it + 1) + " generacji.");
-            printToScreen();
+            notifyObservator();
             try {
                 Thread.sleep(1000);
             } catch (Exception e) {
 
-                System.out.println("np. zostałem obudzony przedwcześnie");
+                System.out.println("blad");
             }
             clearGrid(mainGrid.gameGrid);
             changeGrid();
