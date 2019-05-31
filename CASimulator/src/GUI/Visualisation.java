@@ -246,6 +246,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
         buttonGroupCellState.add(jRadioButtonWire);
         jRadioButtonWire.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jRadioButtonWire.setSelected(true);
         jRadioButtonWire.setText("Wire");
 
         buttonGroupCellState.add(jRadioButtonElectronHead);
