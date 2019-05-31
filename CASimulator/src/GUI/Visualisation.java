@@ -25,7 +25,6 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private int widthCell;
     private int heightCell;
 
-    private char typeOfGame = 'W';
     private CellularAutomaton currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
 
     Graphics paintGrid;
@@ -35,6 +34,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         initComponents();
         mainImage = createImage(mainPanel.getWidth(), mainPanel.getHeight());
         paintGrid = mainImage.getGraphics();
+        currentGame.addObservator(this);
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 onUpdate();
@@ -116,7 +116,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jLabelFileName = new javax.swing.JLabel();
         jLabelGridSize = new javax.swing.JLabel();
         jLabelInterval = new javax.swing.JLabel();
-        jTextFieldNumberGeneratiom = new javax.swing.JTextField();
+        jTextFieldNumberGeneration = new javax.swing.JTextField();
         jButtonFilePath = new javax.swing.JButton();
         jTextFieldFileName = new javax.swing.JTextField();
         jButtonLoad = new javax.swing.JButton();
@@ -189,7 +189,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jLabelInterval.setText("Interval");
         jLabelInterval.setPreferredSize(new java.awt.Dimension(53, 20));
 
-        jTextFieldNumberGeneratiom.setText("0");
+        jTextFieldNumberGeneration.setText("0");
 
         jButtonFilePath.setBackground(new java.awt.Color(255, 255, 255));
         jButtonFilePath.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -228,6 +228,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonRun.setBackground(new java.awt.Color(255, 255, 255));
         jButtonRun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/play.png"))); // NOI18N
         jButtonRun.setPreferredSize(new java.awt.Dimension(60, 35));
+        jButtonRun.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonRunMouseClicked(evt);
+            }
+        });
 
         jButtonPause.setBackground(new java.awt.Color(255, 255, 255));
         jButtonPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/pause.png"))); // NOI18N
@@ -334,7 +339,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelNumberGeneration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldNumberGeneratiom, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldNumberGeneration, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jButtonClearGrid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
@@ -380,7 +385,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelNumberGeneration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNumberGeneratiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextFieldNumberGeneration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelFileName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -503,6 +508,12 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         }
     }//GEN-LAST:event_mainPanelMouseClicked
 
+    private void jButtonRunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRunMouseClicked
+        int countGen = Integer.parseInt(jTextFieldNumberGeneration.getText());
+        currentGame.addObservator(this);
+        currentGame.generateAll(countGen);
+    }//GEN-LAST:event_jButtonRunMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -563,7 +574,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private javax.swing.JRadioButton jRadioButtonWire;
     private javax.swing.JSeparator jSeparatorMenu;
     private javax.swing.JTextField jTextFieldFileName;
-    private javax.swing.JTextField jTextFieldNumberGeneratiom;
+    private javax.swing.JTextField jTextFieldNumberGeneration;
     private javax.swing.JToggleButton jToggleButtonGoLWW;
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
