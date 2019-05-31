@@ -12,7 +12,7 @@ import Grid.Cell;
  * @author Jakub
  */
 public class WireWorld extends CellularAutomaton {
-    
+
     public WireWorld(int wi, int hei) {
         super(wi, hei);
     }
@@ -25,9 +25,9 @@ public class WireWorld extends CellularAutomaton {
     public Cell cellState(int i, int j) {
         int electronHeadNumber = 0;
         switch (mainGrid.gameGrid[i][j]) {
-            case EMPTY: 
+            case EMPTY:
                 return Cell.EMPTY;
-            case WIRE: 
+            case WIRE:
                 for (int a = -1; a < 2; a++) {
                     for (int b = -1; b < 2; b++) {
                         if (mainGrid.gameGrid[i + a][j + b] == Cell.EHEAD) {
@@ -40,9 +40,9 @@ public class WireWorld extends CellularAutomaton {
                 } else {
                     return Cell.WIRE;
                 }
-            case EHEAD: 
+            case EHEAD:
                 return Cell.ETAIL;
-            case ETAIL: 
+            case ETAIL:
                 return Cell.WIRE;
 
         }
@@ -57,13 +57,18 @@ public class WireWorld extends CellularAutomaton {
                     this.utilGrid.gameGrid[i][j] = cellState(i, j);
                 }
             }
-            System.out.println("Plansza po " + (it + 1) + " generacji.");
+            notifyObservator();
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                System.out.println("blad");
+            }
             clearGrid(this.mainGrid.gameGrid);
             changeGrid();
             clearGrid(this.utilGrid.gameGrid);
         }
     }
-    
+
     @Override
     public void clearGrid(Cell[][] gridToClear) {
         for (int i = 0; i < gridToClear.length; i++) {
