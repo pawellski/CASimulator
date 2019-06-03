@@ -300,6 +300,9 @@
           <Dimension value="[45, 20]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonFilePathMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldFileName">
       <Properties>
@@ -323,6 +326,9 @@
           <Dimension value="[73, 20]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonLoadMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBoxSetDimension">
       <Properties>

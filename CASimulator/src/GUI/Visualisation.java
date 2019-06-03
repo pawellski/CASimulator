@@ -13,6 +13,10 @@ import Grid.Grid;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -28,6 +32,8 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
     private CellularAutomaton currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
     private Grid clipboardGrid;
+    
+    private String fileName;
 
     Graphics paintGrid;
     Image mainImage;
@@ -199,6 +205,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonFilePath.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jButtonFilePath.setText("...");
         jButtonFilePath.setPreferredSize(new java.awt.Dimension(45, 20));
+        jButtonFilePath.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonFilePathMouseClicked(evt);
+            }
+        });
 
         jTextFieldFileName.setToolTipText("LOAD");
 
@@ -208,6 +219,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonLoad.setToolTipText("");
         jButtonLoad.setMinimumSize(new java.awt.Dimension(65, 25));
         jButtonLoad.setPreferredSize(new java.awt.Dimension(73, 20));
+        jButtonLoad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLoadMouseClicked(evt);
+            }
+        });
 
         jComboBoxSetDimension.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "15 x 10", "30 x 20", "60 x 40", "120 x 80" }));
         jComboBoxSetDimension.addActionListener(new java.awt.event.ActionListener() {
@@ -646,6 +662,23 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                 break;
         }
     }//GEN-LAST:event_jComboBoxSetIntervalActionPerformed
+
+    private void jButtonFilePathMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFilePathMouseClicked
+        JFileChooser fc = new JFileChooser();
+        if(fc.showOpenDialog(null)==JFileChooser.APPROVE_OPTION);
+        fileName = fc.getSelectedFile().getPath();
+        jTextFieldFileName.setText(fileName);
+    }//GEN-LAST:event_jButtonFilePathMouseClicked
+
+    private void jButtonLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoadMouseClicked
+        try {
+            FileReader fr = new FileReader(jTextFieldFileName.getText());
+            fr.readFile(this.currentGame);
+            onUpdate();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Visualisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonLoadMouseClicked
 
     /**
      * @param args the command line arguments
