@@ -30,7 +30,7 @@ public class WireWorld extends CellularAutomaton {
             case WIRE:
                 for (int a = -1; a < 2; a++) {
                     for (int b = -1; b < 2; b++) {
-                        if (mainGrid.getGameGridCell(i+a, j+b) == Cell.EHEAD) {
+                        if (mainGrid.getGameGridCell(i + a, j + b) == Cell.EHEAD) {
                             electronHeadNumber++;
                         }
                     }
@@ -50,23 +50,20 @@ public class WireWorld extends CellularAutomaton {
     }
 
     @Override
-    public void generateAll(int generationCount) {
-        for (int it = 0; it < generationCount; it++) {
-            for (int i = 1; i < this.mainGrid.getHeight() - 1; i++) {
-                for (int j = 1; j < this.mainGrid.getWidth() - 1; j++) {
-                    this.utilGrid.setGameGridCell(i, j, cellState(i, j));
-                }
+    public void generate(int intervalTime) {
+        for (int i = 1; i < this.mainGrid.getHeight() - 1; i++) {
+            for (int j = 1; j < this.mainGrid.getWidth() - 1; j++) {
+                this.utilGrid.setGameGridCell(i, j, cellState(i, j));
             }
-            notifyObservator();
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-                System.out.println("blad");
-            }
-            clearGrid(mainGrid.getGameGrid());
-            changeGrid();
-            clearGrid(utilGrid.getGameGrid());
         }
+        notifyObservator();
+      //  try {
+      //      Thread.sleep(intervalTime);
+     //   } catch (InterruptedException e) {
+      //  }
+        clearGrid(mainGrid.getGameGrid());
+        changeGrid();
+        clearGrid(utilGrid.getGameGrid());
     }
 
     @Override

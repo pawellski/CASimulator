@@ -22,25 +22,23 @@ public class GameOfLife extends CellularAutomaton{
     }
 
     @Override
-    public void generateAll(int generationCount) {
-        for (int it = 0; it < generationCount; it++) {
+    public void generate(int intervalTime) {
+        //for (int it = 0; it < generationCount; it++) {
             for (int i = 1; i < mainGrid.getHeight() - 1; i++) {
                 for (int j = 1; j < mainGrid.getWidth() - 1; j++) {
                     utilGrid.setGameGridCell(i, j, cellState(i, j));
                 }
             }
             notifyObservator();
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-
-                System.out.println("blad");
-            }
+           // try {
+              //  Thread.sleep(intervalTime);
+           // } catch (InterruptedException e) {
+           // }
             clearGrid(mainGrid.getGameGrid());
             changeGrid();
             clearGrid(utilGrid.getGameGrid());
         }
-    }
+   // }
 
     @Override
     public Cell cellState(int i, int j) {

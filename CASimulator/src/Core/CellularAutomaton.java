@@ -86,7 +86,7 @@ public abstract class CellularAutomaton implements Observable {
 
     public abstract void clearGrid(Cell[][] gridToClear);
 
-    public abstract void generateAll(int generationCount);
+    public abstract void generate(int intervalTime);
 
     public abstract Cell cellState(int i, int j);
 }
