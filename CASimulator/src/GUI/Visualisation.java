@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -243,6 +244,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonSave.setFont(new java.awt.Font("Verdana", 1, 10)); // NOI18N
         jButtonSave.setText("SAVE");
         jButtonSave.setPreferredSize(new java.awt.Dimension(110, 50));
+        jButtonSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonSaveMouseClicked(evt);
+            }
+        });
 
         jButtonClearGrid.setFont(new java.awt.Font("Verdana", 1, 10)); // NOI18N
         jButtonClearGrid.setText("CLEAR GRID");
@@ -665,9 +671,10 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
     private void jButtonFilePathMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFilePathMouseClicked
         JFileChooser fc = new JFileChooser();
-        if(fc.showOpenDialog(null)==JFileChooser.APPROVE_OPTION);
-        fileName = fc.getSelectedFile().getPath();
-        jTextFieldFileName.setText(fileName);
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            fileName = fc.getSelectedFile().getAbsolutePath();
+            jTextFieldFileName.setText(fileName);
+        }
     }//GEN-LAST:event_jButtonFilePathMouseClicked
 
     private void jButtonLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoadMouseClicked
@@ -679,6 +686,18 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             Logger.getLogger(Visualisation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonLoadMouseClicked
+
+    private void jButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSaveMouseClicked
+        JFileChooser fc = new JFileChooser();
+        if(fc.showSaveDialog(null)==JFileChooser.APPROVE_OPTION){
+            try {
+                SaveFileWriter sfw = new SaveFileWriter(fc.getSelectedFile().getPath());
+                sfw.writeFile(this.currentGame);
+            } catch (IOException ex) {
+                Logger.getLogger(Visualisation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButtonSaveMouseClicked
 
     /**
      * @param args the command line arguments

@@ -24,7 +24,7 @@ public class SaveFileWriter {
 
     public SaveFileWriter(String fileName) throws IOException {
         file = new File(fileName);
-        this.fw = new FileWriter(file, false);
+        this.fw = new FileWriter(this.file, false);
         this.pw = new PrintWriter(fw);
     }
 
@@ -43,8 +43,8 @@ public class SaveFileWriter {
     
     private void writeGrid(CellularAutomaton ca) {
         pw.println("Grid:");
-        for (int i = 0; i < ca.getMainGrid().getHeight(); i++) {
-            for (int j = 0; j < ca.getMainGrid().getWidth(); j++) {
+        for (int i = 1; i < ca.getMainGrid().getHeight() - 1; i++) {
+            for (int j = 1; j < ca.getMainGrid().getWidth() - 1; j++) {
                 if ("Core.WireWorld".equals(gameType)) {
                     switch (ca.getMainGrid().getGameGridCell(i, j)) {
                         case WIRE:
@@ -73,9 +73,13 @@ public class SaveFileWriter {
             }
             pw.println();
         }
+        pw.println("/grid");
+        pw.close();
+        pw.flush();
     }
     
-    private void writeFile(CellularAutomaton ca) {
+    public void writeFile(CellularAutomaton ca) {
+        getGameType(ca);
         writeGameType();
         writeGrid(ca);
     }
