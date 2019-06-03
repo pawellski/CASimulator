@@ -565,7 +565,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private void jButtonRunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRunMouseClicked
         int countGen = Integer.parseInt(jTextFieldNumberGeneration.getText());
         if (countGen < 0) {
-            JOptionPane.showMessageDialog(null, "The number of generations can't be negative!", "nuNumber of generations warning", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "The number of generations can't be negative!", "Number of generations warning", JOptionPane.WARNING_MESSAGE);
         } else {
             currentGame.addObservator(this);
             java.awt.EventQueue.invokeLater(new Runnable() {
