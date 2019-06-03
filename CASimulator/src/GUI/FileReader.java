@@ -75,16 +75,16 @@ public class FileReader {
             for(int j = 0; j < columnsNumber; j++){
                 switch(sc.nextInt()){
                     case 0:
-                        ca.setCellFromGrid(i, j, Cell.EMPTY);
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.EMPTY);
                         break;
                     case 1:
-                        ca.setCellFromGrid(i, j, Cell.WIRE);
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.WIRE);
                         break;
                     case 2:
-                        ca.setCellFromGrid(i, j, Cell.EHEAD);
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.EHEAD);
                         break;
                     case 3:
-                        ca.setCellFromGrid(i, j, Cell.ETAIL);
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.ETAIL);
                         break;
                 }
             }
