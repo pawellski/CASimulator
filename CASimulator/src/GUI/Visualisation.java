@@ -32,6 +32,8 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     Graphics paintGrid;
     Image mainImage;
 
+    private int interval = 1000;
+
     public Visualisation() {
         initComponents();
         mainImage = createImage(mainPanel.getWidth(), mainPanel.getHeight());
@@ -208,8 +210,19 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonLoad.setPreferredSize(new java.awt.Dimension(73, 20));
 
         jComboBoxSetDimension.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "15 x 10", "30 x 20", "60 x 40", "120 x 80" }));
+        jComboBoxSetDimension.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSetDimensionActionPerformed(evt);
+            }
+        });
 
         jComboBoxSetInterval.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1/8 s", "1/4 s", "1/2 s", "1 s", "2 s" }));
+        jComboBoxSetInterval.setSelectedIndex(3);
+        jComboBoxSetInterval.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSetIntervalActionPerformed(evt);
+            }
+        });
 
         jButtonSave.setFont(new java.awt.Font("Verdana", 1, 10)); // NOI18N
         jButtonSave.setText("SAVE");
@@ -574,6 +587,56 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                 break;
         }
     }//GEN-LAST:event_jButtonClearGridMouseClicked
+
+    private void jComboBoxSetDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSetDimensionActionPerformed
+        switch (jComboBoxSetDimension.getSelectedItem().toString()) {
+            case "15 x 10":
+                numberHorizontalCells = 15;
+                numberVerticalCells = 10;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+            case "30 x 20":
+                numberHorizontalCells = 30;
+                numberVerticalCells = 20;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+
+                break;
+            case "60 x 40":
+                numberHorizontalCells = 60;
+                numberVerticalCells = 40;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+            case "120 x 80":
+                numberHorizontalCells = 120;
+                numberVerticalCells = 80;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+        }
+    }//GEN-LAST:event_jComboBoxSetDimensionActionPerformed
+
+    private void jComboBoxSetIntervalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSetIntervalActionPerformed
+        switch (jComboBoxSetInterval.getSelectedItem().toString()) {
+            case "1/8 s":
+                interval = 125;
+                break;
+            case "1/4 s":
+                interval = 250;
+                break;
+            case "1/2 s":
+                interval = 500;
+                break;
+            case "1 s":
+                interval = 1000;
+                break;
+            case "2 s":
+                interval = 2000;
+                break;
+        }
+    }//GEN-LAST:event_jComboBoxSetIntervalActionPerformed
 
     /**
      * @param args the command line arguments
