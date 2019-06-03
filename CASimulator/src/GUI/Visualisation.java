@@ -542,7 +542,16 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private void jButtonRunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRunMouseClicked
         int countGen = Integer.parseInt(jTextFieldNumberGeneration.getText());
         currentGame.addObservator(this);
-        currentGame.generateAll(countGen);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                for (int it = 0; it < countGen; it++) {
+                    currentGame.generate(interval);
+                }
+            }
+        }
+        );
+
     }//GEN-LAST:event_jButtonRunMouseClicked
 
     private void jButtonCopyGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCopyGridMouseClicked
