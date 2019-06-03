@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -563,17 +564,20 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
     private void jButtonRunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRunMouseClicked
         int countGen = Integer.parseInt(jTextFieldNumberGeneration.getText());
-        currentGame.addObservator(this);
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (int it = 0; it < countGen; it++) {
-                    currentGame.generate(interval);
+        if (countGen < 0) {
+            JOptionPane.showMessageDialog(null, "The number of generations can't be negative!", "nuNumber of generations warning", JOptionPane.ERROR_MESSAGE);
+        } else {
+            currentGame.addObservator(this);
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int it = 0; it < countGen; it++) {
+                        currentGame.generate(interval);
+                    }
                 }
             }
+            );
         }
-        );
-
     }//GEN-LAST:event_jButtonRunMouseClicked
 
     private void jButtonCopyGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCopyGridMouseClicked
