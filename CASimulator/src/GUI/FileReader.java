@@ -74,27 +74,27 @@ public class FileReader {
         for (int i = 0; i < rowsNumber; i++) {
             for (int j = 0; j < columnsNumber; j++) {
                 if ("Core.WireWorld".equals(gameType)) {
-                    switch (sc.nextInt()) {
-                        case 0:
-                            ca.setCellFromGrid(i, j, Cell.EMPTY);
-                            break;
-                        case 1:
-                            ca.setCellFromGrid(i, j, Cell.WIRE);
-                            break;
-                        case 2:
-                            ca.setCellFromGrid(i, j, Cell.EHEAD);
-                            break;
-                        case 3:
-                            ca.setCellFromGrid(i, j, Cell.ETAIL);
-                            break;
+                    switch(sc.nextInt()){
+                    case 0:
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.EMPTY);
+                        break;
+                    case 1:
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.WIRE);
+                        break;
+                    case 2:
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.EHEAD);
+                        break;
+                    case 3:
+                        ca.getMainGrid().setGameGridCell(i, j, Cell.ETAIL);
+                        break;
                     }
                 } else {
                     switch (sc.nextInt()) {
                         case 0:
-                            ca.setCellFromGrid(i, j, Cell.DEAD);
+                            ca.getMainGrid().setGameGridCell(i, j, Cell.DEAD);
                             break;
                         case 1:
-                            ca.setCellFromGrid(i, j, Cell.ALIVE);
+                            ca.getMainGrid().setGameGridCell(i, j, Cell.ALIVE);
                             break;
                     }
                 }
