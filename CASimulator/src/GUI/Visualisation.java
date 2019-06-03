@@ -682,13 +682,16 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }//GEN-LAST:event_jButtonFilePathMouseClicked
 
     private void jButtonLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoadMouseClicked
+
         try {
             FileReader fr = new FileReader(jTextFieldFileName.getText());
             fr.readFile(this.currentGame);
             onUpdate();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Visualisation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "The file name field can't be empty or contain path to a non-existent file!", "File loading warning", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_jButtonLoadMouseClicked
 
     private void jButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSaveMouseClicked
