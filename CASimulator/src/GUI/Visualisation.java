@@ -9,6 +9,7 @@ import Core.CellularAutomaton;
 import Core.GameOfLife;
 import Core.WireWorld;
 import Grid.Cell;
+import Grid.Grid;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -26,6 +27,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private int heightCell;
 
     private CellularAutomaton currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
+    private Grid clipboardGrid;
 
     Graphics paintGrid;
     Image mainImage;
@@ -54,7 +56,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             case "Core.WireWorld":
                 for (int i = 0; i < numberVerticalCells; i++) {
                     for (int j = 0; j < numberHorizontalCells; j++) {
-                        switch (currentGame.getCellFromGrid(i + 1, j + 1)) {
+                        switch (currentGame.getMainGrid().getGameGridCell(i + 1, j + 1)) {
                             case EMPTY:
                                 paintGrid.setColor(Color.BLACK);
                                 paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
@@ -78,7 +80,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             case "Core.GameOfLife":
                 for (int i = 0; i < numberVerticalCells; i++) {
                     for (int j = 0; j < numberHorizontalCells; j++) {
-                        if (currentGame.getCellFromGrid(i + 1, j + 1) == Cell.ALIVE) {
+                        if (currentGame.getMainGrid().getGameGridCell(i + 1, j + 1) == Cell.ALIVE) {
                             paintGrid.setColor(Color.WHITE);
                             paintGrid.fillRect(j * heightCell, i * widthCell, widthCell, heightCell);
                         } else {
@@ -216,14 +218,29 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonClearGrid.setFont(new java.awt.Font("Verdana", 1, 10)); // NOI18N
         jButtonClearGrid.setText("CLEAR GRID");
         jButtonClearGrid.setPreferredSize(new java.awt.Dimension(110, 50));
+        jButtonClearGrid.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonClearGridMouseClicked(evt);
+            }
+        });
 
         jButtonCopyGrid.setFont(new java.awt.Font("Verdana", 1, 10)); // NOI18N
         jButtonCopyGrid.setText("COPY GRID");
         jButtonCopyGrid.setPreferredSize(new java.awt.Dimension(110, 50));
+        jButtonCopyGrid.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCopyGridMouseClicked(evt);
+            }
+        });
 
         jButtonPasteGrid.setFont(new java.awt.Font("Verdana", 1, 10)); // NOI18N
         jButtonPasteGrid.setText("PASTE GRID");
         jButtonPasteGrid.setPreferredSize(new java.awt.Dimension(110, 50));
+        jButtonPasteGrid.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonPasteGridMouseClicked(evt);
+            }
+        });
 
         jButtonRun.setBackground(new java.awt.Color(255, 255, 255));
         jButtonRun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/play.png"))); // NOI18N
@@ -474,35 +491,35 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         switch (currentGame.getClass().getName()) {
             case "Core.WireWorld":
                 if (jRadioButtonWire.isSelected()) {
-                    if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.WIRE) {
-                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
+                    if (currentGame.getMainGrid().getGameGridCell(cellDimY + 1, cellDimX + 1) == Cell.WIRE) {
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
                     } else {
-                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.WIRE);
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.WIRE);
                     }
                     onUpdate();
 
                 } else if (jRadioButtonElectronHead.isSelected()) {
-                    if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.EHEAD) {
-                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
+                    if (currentGame.getMainGrid().getGameGridCell(cellDimY + 1, cellDimX + 1) == Cell.EHEAD) {
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
                     } else {
-                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EHEAD);
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EHEAD);
                     }
                     onUpdate();
 
                 } else if (jRadioButtonElectronTail.isSelected()) {
-                    if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.ETAIL) {
-                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
+                    if (currentGame.getMainGrid().getGameGridCell(cellDimY + 1, cellDimX + 1) == Cell.ETAIL) {
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EMPTY);
                     } else {
-                        currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.ETAIL);
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ETAIL);
                     }
                     onUpdate();
                 }
                 break;
             case "Core.GameOfLife":
-                if (currentGame.getCellFromGrid(cellDimY + 1, cellDimX + 1) == Cell.ALIVE) {
-                    currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.DEAD);
+                if (currentGame.getMainGrid().getGameGridCell(cellDimY + 1, cellDimX + 1) == Cell.ALIVE) {
+                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.DEAD);
                 } else {
-                    currentGame.setCellFromGrid(cellDimY + 1, cellDimX + 1, Cell.ALIVE);
+                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ALIVE);
                 }
                 onUpdate();
                 break;
@@ -514,6 +531,49 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         currentGame.addObservator(this);
         currentGame.generateAll(countGen);
     }//GEN-LAST:event_jButtonRunMouseClicked
+
+    private void jButtonCopyGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCopyGridMouseClicked
+        clipboardGrid = new Grid(currentGame.getMainGrid().getHeight(), currentGame.getMainGrid().getWidth());
+        for (int i = 0; i < clipboardGrid.getHeight(); i++) {
+            for (int j = 0; j < clipboardGrid.getWidth(); j++) {
+                clipboardGrid.setGameGridCell(i, j, currentGame.getMainGrid().getGameGridCell(i, j));
+            }
+        }
+    }//GEN-LAST:event_jButtonCopyGridMouseClicked
+
+    private void jButtonPasteGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPasteGridMouseClicked
+        try {
+            for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
+                for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
+                    currentGame.getMainGrid().setGameGridCell(i, j, clipboardGrid.getGameGridCell(i, j));
+                }
+            }
+            onUpdate();
+        } catch (NullPointerException e) {
+            System.err.println("Aktualnie w schowku nie ma planszy!");
+        }
+    }//GEN-LAST:event_jButtonPasteGridMouseClicked
+
+    private void jButtonClearGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClearGridMouseClicked
+        switch (currentGame.getClass().getName()) {
+            case "Core.WireWorld":
+                for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
+                    for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
+                        currentGame.getMainGrid().setGameGridCell(i, j, Cell.EMPTY);
+                    }
+                }
+                onUpdate();
+                break;
+            case "Core.GameOfLife":
+                for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
+                    for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
+                        currentGame.getMainGrid().setGameGridCell(i, j, Cell.DEAD);
+                    }
+                }
+                onUpdate();
+                break;
+        }
+    }//GEN-LAST:event_jButtonClearGridMouseClicked
 
     /**
      * @param args the command line arguments
