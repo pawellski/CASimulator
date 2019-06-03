@@ -71,8 +71,8 @@ public class FileReader {
     public void getGridLayout(CellularAutomaton ca) throws NoSuchElementException {
         sc.skip(grid);
         sc.nextLine();
-        for (int i = 0; i < rowsNumber; i++) {
-            for (int j = 0; j < columnsNumber; j++) {
+        for (int i = 1; i < rowsNumber + 1; i++) {
+            for (int j = 1; j < columnsNumber + 1; j++) {
                 if ("Core.WireWorld".equals(gameType)) {
                     switch(sc.nextInt()){
                     case 0:
