@@ -24,9 +24,9 @@ public class GameOfLife extends CellularAutomaton{
     @Override
     public void generateAll(int generationCount) {
         for (int it = 0; it < generationCount; it++) {
-            for (int i = 1; i < mainGrid.gameGrid.length - 1; i++) {
-                for (int j = 1; j < mainGrid.gameGrid[i].length - 1; j++) {
-                    utilGrid.gameGrid[i][j] = cellState(i, j);
+            for (int i = 1; i < mainGrid.getHeight() - 1; i++) {
+                for (int j = 1; j < mainGrid.getWidth() - 1; j++) {
+                    utilGrid.setGameGridCell(i, j, cellState(i, j));
                 }
             }
             notifyObservator();
@@ -36,9 +36,9 @@ public class GameOfLife extends CellularAutomaton{
 
                 System.out.println("blad");
             }
-            clearGrid(mainGrid.gameGrid);
+            clearGrid(mainGrid.getGameGrid());
             changeGrid();
-            clearGrid(utilGrid.gameGrid);
+            clearGrid(utilGrid.getGameGrid());
         }
     }
 
@@ -47,12 +47,12 @@ public class GameOfLife extends CellularAutomaton{
         int aliveNumber = 0;
         for (int a = -1; a < 2; a++) {
             for (int b = -1; b < 2; b++) {
-                if (mainGrid.gameGrid[i + a][j + b] == Cell.ALIVE) {
+                if (mainGrid.getGameGridCell(i+a, j+b) == Cell.ALIVE) {
                     aliveNumber++;
                 }
             }
         }
-        if (mainGrid.gameGrid[i][j] == Cell.ALIVE) {
+        if (mainGrid.getGameGridCell(i, j) == Cell.ALIVE) {
             aliveNumber--;
             if (aliveNumber == 2 || aliveNumber == 3) {
                 return Cell.ALIVE;
