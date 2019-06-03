@@ -156,6 +156,11 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
         mainPanel.setBackground(new java.awt.Color(0, 0, 0));
         mainPanel.setPreferredSize(new java.awt.Dimension(600, 400));
+        mainPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                mainPanelMouseDragged(evt);
+            }
+        });
         mainPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mainPanelMouseClicked(evt);
@@ -705,6 +710,29 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             }
         }
     }//GEN-LAST:event_jButtonSaveMouseClicked
+
+    private void mainPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainPanelMouseDragged
+        int cellDimX = evt.getX() / widthCell;
+        int cellDimY = evt.getY() / heightCell;
+        switch (currentGame.getClass().getName()) {
+            case "Core.WireWorld":
+                if (jRadioButtonWire.isSelected()) {
+                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.WIRE);
+                    onUpdate();
+                } else if (jRadioButtonElectronHead.isSelected()) {
+                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EHEAD);
+                    onUpdate();
+                } else if (jRadioButtonElectronTail.isSelected()) {
+                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ETAIL);
+                    onUpdate();
+                }
+                break;
+            case "Core.GameOfLife":
+                currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ALIVE);
+                onUpdate();
+                break;
+        }
+    }//GEN-LAST:event_mainPanelMouseDragged
 
     /**
      * @param args the command line arguments
