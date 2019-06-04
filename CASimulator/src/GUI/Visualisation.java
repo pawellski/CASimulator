@@ -500,29 +500,14 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jToggleButtonGoLWWMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButtonGoLWWMouseClicked
-        switch (currentGame.getClass().getName()) {
-            case "Core.WireWorld":
-                currentGame = new GameOfLife(numberVerticalCells + 2, numberHorizontalCells + 2);
-                jToggleButtonGoLWW.setText("GAME OF LIFE");
-                jRadioButtonWire.setVisible(false);
-                jRadioButtonElectronHead.setVisible(false);
-                jRadioButtonElectronTail.setVisible(false);
-                jPanelYellow.setVisible(false);
-                jPanelBlue.setVisible(false);
-                jPanelRed.setVisible(false);
-                onUpdate();
-                break;
-            case "Core.GameOfLife":
-                currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
-                jToggleButtonGoLWW.setText("WIRE WORLD");
-                jRadioButtonWire.setVisible(true);
-                jRadioButtonElectronHead.setVisible(true);
-                jRadioButtonElectronTail.setVisible(true);
-                jPanelYellow.setVisible(true);
-                jPanelBlue.setVisible(true);
-                jPanelRed.setVisible(true);
-                onUpdate();
-                break;
+        if (isGridChanged()) {
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResultToggle = JOptionPane.showConfirmDialog(null, "Changing the simulator now will discard changes made to the grid. Do you want to continue?", "Warning", dialogButton);
+            if (dialogResultToggle == JOptionPane.YES_OPTION) {
+                toggleGame();
+            }
+        } else {
+            toggleGame();
         }
     }//GEN-LAST:event_jToggleButtonGoLWWMouseClicked
 
@@ -629,32 +614,14 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }//GEN-LAST:event_jButtonClearGridMouseClicked
 
     private void jComboBoxSetDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSetDimensionActionPerformed
-        switch (jComboBoxSetDimension.getSelectedItem().toString()) {
-            case "15 x 10":
-                numberHorizontalCells = 15;
-                numberVerticalCells = 10;
-                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                onUpdate();
-                break;
-            case "30 x 20":
-                numberHorizontalCells = 30;
-                numberVerticalCells = 20;
-                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                onUpdate();
-
-                break;
-            case "60 x 40":
-                numberHorizontalCells = 60;
-                numberVerticalCells = 40;
-                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                onUpdate();
-                break;
-            case "120 x 80":
-                numberHorizontalCells = 120;
-                numberVerticalCells = 80;
-                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                onUpdate();
-                break;
+        if (isGridChanged()) {
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResultSize = JOptionPane.showConfirmDialog(null, "Changing the grid size now will discard changes made to the grid. Do you want to continue?", "Warning", dialogButton);
+            if (dialogResultSize == JOptionPane.YES_OPTION) {
+                changeSize();
+            }
+        } else {
+            changeSize();
         }
     }//GEN-LAST:event_jComboBoxSetDimensionActionPerformed
 
@@ -734,6 +701,84 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         }
     }//GEN-LAST:event_mainPanelMouseDragged
 
+    private boolean isGridChanged() {
+        if ("Core.WireWorld".equals(currentGame.getClass().getName())) {
+            for (int i = 0; i < currentGame.getMainGrid().getHeight(); i++) {
+                for (int j = 0; j < currentGame.getMainGrid().getWidth(); j++) {
+                    if (currentGame.getMainGrid().getGameGridCell(i, j) != Cell.EMPTY) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < currentGame.getMainGrid().getHeight(); i++) {
+                for (int j = 0; j < currentGame.getMainGrid().getWidth(); j++) {
+                    if (currentGame.getMainGrid().getGameGridCell(i, j) != Cell.DEAD) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private void changeSize() {
+        switch (jComboBoxSetDimension.getSelectedItem().toString()) {
+                case "15 x 10":
+                    numberHorizontalCells = 15;
+                    numberVerticalCells = 10;
+                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                    onUpdate();
+                    break;
+                case "30 x 20":
+                    numberHorizontalCells = 30;
+                    numberVerticalCells = 20;
+                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                    onUpdate();
+
+                    break;
+                case "60 x 40":
+                    numberHorizontalCells = 60;
+                    numberVerticalCells = 40;
+                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                    onUpdate();
+                    break;
+                case "120 x 80":
+                    numberHorizontalCells = 120;
+                    numberVerticalCells = 80;
+                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                    onUpdate();
+                    break;
+            }
+    }
+    
+    private void toggleGame() {
+        switch (currentGame.getClass().getName()) {
+                case "Core.WireWorld":
+                    currentGame = new GameOfLife(numberVerticalCells + 2, numberHorizontalCells + 2);
+                    jToggleButtonGoLWW.setText("GAME OF LIFE");
+                    jRadioButtonWire.setVisible(false);
+                    jRadioButtonElectronHead.setVisible(false);
+                    jRadioButtonElectronTail.setVisible(false);
+                    jPanelYellow.setVisible(false);
+                    jPanelBlue.setVisible(false);
+                    jPanelRed.setVisible(false);
+                    onUpdate();
+                    break;
+                case "Core.GameOfLife":
+                    currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
+                    jToggleButtonGoLWW.setText("WIRE WORLD");
+                    jRadioButtonWire.setVisible(true);
+                    jRadioButtonElectronHead.setVisible(true);
+                    jRadioButtonElectronTail.setVisible(true);
+                    jPanelYellow.setVisible(true);
+                    jPanelBlue.setVisible(true);
+                    jPanelRed.setVisible(true);
+                    onUpdate();
+                    break;
+            }
+    }
+    
     /**
      * @param args the command line arguments
      */
