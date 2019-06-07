@@ -13,8 +13,8 @@ import Grid.Cell;
  */
 public class WireWorld extends CellularAutomaton {
 
-    public WireWorld(int wi, int hei) {
-        super(wi, hei);
+    public WireWorld(int hei, int wi) {
+        super(hei, wi);
     }
 
     public WireWorld(Cell[][] grid) {
@@ -50,17 +50,13 @@ public class WireWorld extends CellularAutomaton {
     }
 
     @Override
-    public void generate(int intervalTime) {
+    public void generate() {
         for (int i = 1; i < this.mainGrid.getHeight() - 1; i++) {
             for (int j = 1; j < this.mainGrid.getWidth() - 1; j++) {
                 this.utilGrid.setGameGridCell(i, j, cellState(i, j));
             }
         }
         notifyObservator();
-      //  try {
-      //      Thread.sleep(intervalTime);
-     //   } catch (InterruptedException e) {
-      //  }
         clearGrid(mainGrid.getGameGrid());
         changeGrid();
         clearGrid(utilGrid.getGameGrid());
