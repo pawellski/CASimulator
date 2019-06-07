@@ -60,6 +60,14 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         );
     }
 
+    /**
+     *
+     * @return
+     */
+    public CellularAutomaton getCurrentGame() {
+        return this.currentGame;
+    }
+    
     @Override
     public void onUpdate() {
         widthCell = mainPanel.getWidth() / numberHorizontalCells;
@@ -568,6 +576,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }//GEN-LAST:event_mainPanelMouseClicked
 
     private void jButtonRunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRunMouseClicked
+
         try {
             countGenerations = Integer.parseInt(jTextFieldNumberGeneration.getText());
             if (countGenerations < 0) {
@@ -579,6 +588,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "The number of generations must be number!", "Number of generations warning", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_jButtonRunMouseClicked
 
     private void jButtonCopyGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCopyGridMouseClicked
@@ -671,7 +681,6 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             fr.readFile(this.currentGame);
             onUpdate();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Visualisation.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "The file name field can't be empty or contain path to a non-existent file!", "File loading warning", JOptionPane.WARNING_MESSAGE);
         }
 
@@ -690,31 +699,40 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }//GEN-LAST:event_jButtonSaveMouseClicked
 
     private void mainPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainPanelMouseDragged
-        int cellDimX = evt.getX() / widthCell;
-        int cellDimY = evt.getY() / heightCell;
-        switch (currentGame.getClass().getName()) {
-            case "Core.WireWorld":
-                if (jRadioButtonWire.isSelected()) {
-                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.WIRE);
-                    onUpdate();
-                } else if (jRadioButtonElectronHead.isSelected()) {
-                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EHEAD);
-                    onUpdate();
-                } else if (jRadioButtonElectronTail.isSelected()) {
-                    currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ETAIL);
-                    onUpdate();
+        try {
+            int cellDimX = evt.getX() / widthCell;
+            int cellDimY = evt.getY() / heightCell;
+            if (cellDimX < currentGame.getMainGrid().getWidth() - 2 && cellDimX > -1 && cellDimY < currentGame.getMainGrid().getHeight() - 2 && cellDimY > -1) {
+                switch (currentGame.getClass().getName()) {
+                    case "Core.WireWorld":
+                        if (jRadioButtonWire.isSelected()) {
+                            currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.WIRE);
+                            onUpdate();
+                        } else if (jRadioButtonElectronHead.isSelected()) {
+                            currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.EHEAD);
+                            onUpdate();
+                        } else if (jRadioButtonElectronTail.isSelected()) {
+                            currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ETAIL);
+                            onUpdate();
+                        }
+                        break;
+                    case "Core.GameOfLife":
+                        currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ALIVE);
+                        onUpdate();
+                        break;
                 }
-                break;
-            case "Core.GameOfLife":
-                currentGame.getMainGrid().setGameGridCell(cellDimY + 1, cellDimX + 1, Cell.ALIVE);
-                onUpdate();
-                break;
+            } else {
+
+            }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            
         }
     }//GEN-LAST:event_mainPanelMouseDragged
 
     private void jButtonPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPauseActionPerformed
         updatePanelThread.interrupt();
     }//GEN-LAST:event_jButtonPauseActionPerformed
+
 
     private void jButtonOneStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOneStepActionPerformed
         updatePanelThread = new GameThread(currentGame, 1, interval);

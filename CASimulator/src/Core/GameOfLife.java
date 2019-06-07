@@ -13,6 +13,7 @@ import Grid.Cell;
  */
 public class GameOfLife extends CellularAutomaton {
 
+    
     public GameOfLife(int hei, int wi) {
         super(hei, wi);
     }
@@ -29,9 +30,9 @@ public class GameOfLife extends CellularAutomaton {
             }
         }
         notifyObservator();
-        printToScreen();
         clearGrid(mainGrid.getGameGrid());
         changeGrid();
+        isGridChanging();
         clearGrid(utilGrid.getGameGrid());
     }
 
@@ -69,5 +70,7 @@ public class GameOfLife extends CellularAutomaton {
             }
         }
     }
+
+   
 
 }

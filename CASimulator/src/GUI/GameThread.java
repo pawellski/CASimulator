@@ -6,6 +6,7 @@
 package GUI;
 
 import Core.CellularAutomaton;
+import Core.GameOfLife;
 
 /**
  *
@@ -27,7 +28,7 @@ public class GameThread extends Thread {
     @Override
     public void run() {
         int iterations = 0;
-        while (flag && iterations < countGenerations) {
+        while (flag && threadAutomaton.isGridChanging() && iterations < countGenerations) {
             threadAutomaton.generate();
             try {
                 Thread.sleep(intervalTime);
@@ -37,10 +38,13 @@ public class GameThread extends Thread {
             iterations++;
         }
     }
+    
+   
 
     @Override
     public void interrupt() {
         flag = false;
     }
 
+    
 }
