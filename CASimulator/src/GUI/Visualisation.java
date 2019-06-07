@@ -32,22 +32,27 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private int widthCell;
     private int heightCell;
 
-    private CellularAutomaton currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
     private Grid clipboardGrid;
-    
+
     private String fileName;
 
     Graphics paintGrid;
     Image mainImage;
 
     private int interval = 1000;
+    private int countGenerations;
+
+    private CellularAutomaton currentGame;
+    GameThread updatePanelThread;
 
     public Visualisation() {
         initComponents();
         mainImage = createImage(mainPanel.getWidth(), mainPanel.getHeight());
         paintGrid = mainImage.getGraphics();
+        currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
         currentGame.addObservator(this);
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 onUpdate();
             }
@@ -206,7 +211,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jLabelInterval.setText("Interval");
         jLabelInterval.setPreferredSize(new java.awt.Dimension(53, 20));
 
-        jTextFieldNumberGeneration.setText("0");
+        jTextFieldNumberGeneration.setText("10");
 
         jButtonFilePath.setBackground(new java.awt.Color(255, 255, 255));
         jButtonFilePath.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -296,11 +301,21 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         jButtonPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/pause.png"))); // NOI18N
         jButtonPause.setToolTipText("");
         jButtonPause.setPreferredSize(new java.awt.Dimension(60, 35));
+        jButtonPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPauseActionPerformed(evt);
+            }
+        });
 
         jButtonOneStep.setBackground(new java.awt.Color(255, 255, 255));
         jButtonOneStep.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOneStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/skip.png"))); // NOI18N
         jButtonOneStep.setPreferredSize(new java.awt.Dimension(60, 35));
+        jButtonOneStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOneStepActionPerformed(evt);
+            }
+        });
 
         buttonGroupCellState.add(jRadioButtonWire);
         jRadioButtonWire.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -553,20 +568,16 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }//GEN-LAST:event_mainPanelMouseClicked
 
     private void jButtonRunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRunMouseClicked
-        int countGen = Integer.parseInt(jTextFieldNumberGeneration.getText());
-        if (countGen < 0) {
-            JOptionPane.showMessageDialog(null, "The number of generations can't be negative!", "Number of generations warning", JOptionPane.WARNING_MESSAGE);
-        } else {
-            currentGame.addObservator(this);
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    for (int it = 0; it < countGen; it++) {
-                        currentGame.generate(interval);
-                    }
-                }
+        try {
+            countGenerations = Integer.parseInt(jTextFieldNumberGeneration.getText());
+            if (countGenerations < 0) {
+                JOptionPane.showMessageDialog(null, "The number of generations can't be negative!", "Number of generations warning", JOptionPane.WARNING_MESSAGE);
+            } else {
+                updatePanelThread = new GameThread(currentGame, countGenerations, interval);
+                updatePanelThread.start();
             }
-            );
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The number of generations must be number!", "Number of generations warning", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButtonRunMouseClicked
 
@@ -668,7 +679,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
     private void jButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSaveMouseClicked
         JFileChooser fc = new JFileChooser();
-        if(fc.showSaveDialog(null)==JFileChooser.APPROVE_OPTION){
+        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             try {
                 SaveFileWriter sfw = new SaveFileWriter(fc.getSelectedFile().getPath());
                 sfw.writeFile(this.currentGame);
@@ -701,10 +712,19 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         }
     }//GEN-LAST:event_mainPanelMouseDragged
 
+    private void jButtonPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPauseActionPerformed
+        updatePanelThread.interrupt();
+    }//GEN-LAST:event_jButtonPauseActionPerformed
+
+    private void jButtonOneStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOneStepActionPerformed
+        updatePanelThread = new GameThread(currentGame, 1, interval);
+        updatePanelThread.start();
+    }//GEN-LAST:event_jButtonOneStepActionPerformed
+
     private boolean isGridChanged() {
         if ("Core.WireWorld".equals(currentGame.getClass().getName())) {
             for (int i = 0; i < currentGame.getMainGrid().getHeight(); i++) {
-                for (int j = 0; j < currentGame.getMainGrid().getWidth(); j++) {
+                for (int j = 1; j < currentGame.getMainGrid().getWidth(); j++) {
                     if (currentGame.getMainGrid().getGameGridCell(i, j) != Cell.EMPTY) {
                         return true;
                     }
@@ -721,64 +741,66 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         }
         return false;
     }
-    
+
     private void changeSize() {
         switch (jComboBoxSetDimension.getSelectedItem().toString()) {
-                case "15 x 10":
-                    numberHorizontalCells = 15;
-                    numberVerticalCells = 10;
-                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                    onUpdate();
-                    break;
-                case "30 x 20":
-                    numberHorizontalCells = 30;
-                    numberVerticalCells = 20;
-                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                    onUpdate();
-
-                    break;
-                case "60 x 40":
-                    numberHorizontalCells = 60;
-                    numberVerticalCells = 40;
-                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                    onUpdate();
-                    break;
-                case "120 x 80":
-                    numberHorizontalCells = 120;
-                    numberVerticalCells = 80;
-                    currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
-                    onUpdate();
-                    break;
-            }
+            case "15 x 10":
+                numberHorizontalCells = 15;
+                numberVerticalCells = 10;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+            case "30 x 20":
+                numberHorizontalCells = 30;
+                numberVerticalCells = 20;
+                //currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+            case "60 x 40":
+                numberHorizontalCells = 60;
+                numberVerticalCells = 40;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+            case "120 x 80":
+                numberHorizontalCells = 120;
+                numberVerticalCells = 80;
+                currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
+                onUpdate();
+                break;
+        }
     }
-    
+
     private void toggleGame() {
         switch (currentGame.getClass().getName()) {
-                case "Core.WireWorld":
-                    currentGame = new GameOfLife(numberVerticalCells + 2, numberHorizontalCells + 2);
-                    jToggleButtonGoLWW.setText("GAME OF LIFE");
-                    jRadioButtonWire.setVisible(false);
-                    jRadioButtonElectronHead.setVisible(false);
-                    jRadioButtonElectronTail.setVisible(false);
-                    jPanelYellow.setVisible(false);
-                    jPanelBlue.setVisible(false);
-                    jPanelRed.setVisible(false);
-                    onUpdate();
-                    break;
-                case "Core.GameOfLife":
-                    currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
-                    jToggleButtonGoLWW.setText("WIRE WORLD");
-                    jRadioButtonWire.setVisible(true);
-                    jRadioButtonElectronHead.setVisible(true);
-                    jRadioButtonElectronTail.setVisible(true);
-                    jPanelYellow.setVisible(true);
-                    jPanelBlue.setVisible(true);
-                    jPanelRed.setVisible(true);
-                    onUpdate();
-                    break;
-            }
+            case "Core.WireWorld":
+                currentGame = new GameOfLife(numberVerticalCells + 2, numberHorizontalCells + 2);
+                currentGame.addObservator(this);
+                jToggleButtonGoLWW.setText("GAME OF LIFE");
+                jRadioButtonWire.setVisible(false);
+                jRadioButtonElectronHead.setVisible(false);
+                jRadioButtonElectronTail.setVisible(false);
+                jPanelYellow.setVisible(false);
+                jPanelBlue.setVisible(false);
+                jPanelRed.setVisible(false);
+                onUpdate();
+                break;
+            case "Core.GameOfLife":
+                currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
+                currentGame.addObservator(this);
+                jToggleButtonGoLWW.setText("WIRE WORLD");
+                jRadioButtonWire.setVisible(true);
+                jRadioButtonElectronHead.setVisible(true);
+                jRadioButtonElectronTail.setVisible(true);
+                jPanelYellow.setVisible(true);
+                jPanelBlue.setVisible(true);
+                jPanelRed.setVisible(true);
+                onUpdate();
+                break;
+        }
     }
-    
+
     /**
      * @param args the command line arguments
      */
