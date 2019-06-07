@@ -33,7 +33,6 @@ public abstract class CellularAutomaton implements Observable {
     public void setMainGrid(Grid mainGrid) {
         this.mainGrid = mainGrid;
     }
-    
 
     @Override
     public void removeObservator(Observator o) {
@@ -62,9 +61,11 @@ public abstract class CellularAutomaton implements Observable {
         observers = new ArrayList<Observator>();
     }
 
-    public void resizeGameGrid(int hei, int wi){
+    public void resizeGameGrid(int hei, int wi) {
         mainGrid.resize(hei, wi);
         clearGrid(mainGrid.getGameGrid());
+        utilGrid.resize(hei, wi);
+        clearGrid(utilGrid.getGameGrid());
     }
 
     public void changeGrid() {
@@ -73,6 +74,7 @@ public abstract class CellularAutomaton implements Observable {
                 mainGrid.setGameGridCell(i, j, utilGrid.getGameGridCell(i, j));
             }
         }
+        observers.toString();
     }
 
     protected void printToScreen() {
@@ -86,7 +88,7 @@ public abstract class CellularAutomaton implements Observable {
 
     public abstract void clearGrid(Cell[][] gridToClear);
 
-    public abstract void generate(int intervalTime);
+    public abstract void generate();
 
     public abstract Cell cellState(int i, int j);
 }
