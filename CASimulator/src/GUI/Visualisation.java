@@ -15,8 +15,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -65,7 +63,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     public CellularAutomaton getCurrentGame() {
         return this.currentGame;
     }
-    
+
     @Override
     public void onUpdate() {
         widthCell = mainPanel.getWidth() / numberHorizontalCells;
@@ -590,46 +588,15 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     }//GEN-LAST:event_jButtonRunMouseClicked
 
     private void jButtonCopyGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCopyGridMouseClicked
-        clipboardGrid = new Grid(currentGame.getMainGrid().getHeight(), currentGame.getMainGrid().getWidth());
-        for (int i = 0; i < clipboardGrid.getHeight(); i++) {
-            for (int j = 0; j < clipboardGrid.getWidth(); j++) {
-                clipboardGrid.setGameGridCell(i, j, currentGame.getMainGrid().getGameGridCell(i, j));
-            }
-        }
+        copyGrid();
     }//GEN-LAST:event_jButtonCopyGridMouseClicked
 
     private void jButtonPasteGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPasteGridMouseClicked
-        try {
-            for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
-                for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
-                    currentGame.getMainGrid().setGameGridCell(i, j, clipboardGrid.getGameGridCell(i, j));
-                }
-            }
-            onUpdate();
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "There is currently no grid in the clipboard!", "Clipboard warning", JOptionPane.WARNING_MESSAGE);
-        }
+        pasteGrid();
     }//GEN-LAST:event_jButtonPasteGridMouseClicked
 
     private void jButtonClearGridMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClearGridMouseClicked
-        switch (currentGame.getClass().getName()) {
-            case "Core.WireWorld":
-                for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
-                    for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
-                        currentGame.getMainGrid().setGameGridCell(i, j, Cell.EMPTY);
-                    }
-                }
-                onUpdate();
-                break;
-            case "Core.GameOfLife":
-                for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
-                    for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
-                        currentGame.getMainGrid().setGameGridCell(i, j, Cell.DEAD);
-                    }
-                }
-                onUpdate();
-                break;
-        }
+        clearGrid();
     }//GEN-LAST:event_jButtonClearGridMouseClicked
 
     private void jComboBoxSetDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSetDimensionActionPerformed
@@ -637,31 +604,15 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResultSize = JOptionPane.showConfirmDialog(null, "Changing the grid size now will discard changes made to the grid. Do you want to continue?", "Warning", dialogButton);
             if (dialogResultSize == JOptionPane.YES_OPTION) {
-                changeSize();
+                setGridDimension();
             }
         } else {
-            changeSize();
+            setGridDimension();
         }
     }//GEN-LAST:event_jComboBoxSetDimensionActionPerformed
 
     private void jComboBoxSetIntervalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSetIntervalActionPerformed
-        switch (jComboBoxSetInterval.getSelectedItem().toString()) {
-            case "1/8 s":
-                interval = 125;
-                break;
-            case "1/4 s":
-                interval = 250;
-                break;
-            case "1/2 s":
-                interval = 500;
-                break;
-            case "1 s":
-                interval = 1000;
-                break;
-            case "2 s":
-                interval = 2000;
-                break;
-        }
+        setInterval();
     }//GEN-LAST:event_jComboBoxSetIntervalActionPerformed
 
     private void jButtonFilePathMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFilePathMouseClicked
@@ -690,7 +641,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
                 SaveFileWriter sfw = new SaveFileWriter(fc.getSelectedFile().getPath());
                 sfw.writeFile(this.currentGame);
             } catch (IOException ex) {
-                Logger.getLogger(Visualisation.class.getName()).log(Level.SEVERE, null, ex);
+
             }
         }
     }//GEN-LAST:event_jButtonSaveMouseClicked
@@ -722,7 +673,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
-            
+
         }
     }//GEN-LAST:event_mainPanelMouseDragged
 
@@ -757,7 +708,70 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         return false;
     }
 
-    private void changeSize() {
+    private void setInterval() {
+        switch (jComboBoxSetInterval.getSelectedItem().toString()) {
+            case "1/8 s":
+                interval = 125;
+                break;
+            case "1/4 s":
+                interval = 250;
+                break;
+            case "1/2 s":
+                interval = 500;
+                break;
+            case "1 s":
+                interval = 1000;
+                break;
+            case "2 s":
+                interval = 2000;
+                break;
+        }
+    }
+
+    private void copyGrid() {
+        clipboardGrid = new Grid(currentGame.getMainGrid().getHeight(), currentGame.getMainGrid().getWidth());
+        for (int i = 0; i < clipboardGrid.getHeight(); i++) {
+            for (int j = 0; j < clipboardGrid.getWidth(); j++) {
+                clipboardGrid.setGameGridCell(i, j, currentGame.getMainGrid().getGameGridCell(i, j));
+            }
+        }
+    }
+
+    private void clearGrid() {
+        switch (currentGame.getClass().getName()) {
+            case "Core.WireWorld":
+                for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
+                    for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
+                        currentGame.getMainGrid().setGameGridCell(i, j, Cell.EMPTY);
+                    }
+                }
+                onUpdate();
+                break;
+            case "Core.GameOfLife":
+                for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
+                    for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
+                        currentGame.getMainGrid().setGameGridCell(i, j, Cell.DEAD);
+                    }
+                }
+                onUpdate();
+                break;
+        }
+    }
+
+    private void pasteGrid() {
+        try {
+            for (int i = 1; i < currentGame.getMainGrid().getHeight() - 1; i++) {
+                for (int j = 1; j < currentGame.getMainGrid().getWidth() - 1; j++) {
+                    currentGame.getMainGrid().setGameGridCell(i, j, clipboardGrid.getGameGridCell(i, j));
+                }
+            }
+            onUpdate();
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "There is currently no grid in the clipboard!", "Clipboard warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void setGridDimension() {
         switch (jComboBoxSetDimension.getSelectedItem().toString()) {
             case "15 x 10":
                 numberHorizontalCells = 15;
@@ -768,7 +782,6 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             case "30 x 20":
                 numberHorizontalCells = 30;
                 numberVerticalCells = 20;
-                //currentGame = new WireWorld(numberVerticalCells + 2, numberHorizontalCells + 2);
                 currentGame.resizeGameGrid(numberVerticalCells + 2, numberHorizontalCells + 2);
                 onUpdate();
                 break;
