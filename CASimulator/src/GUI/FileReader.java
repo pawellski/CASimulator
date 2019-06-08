@@ -25,8 +25,6 @@ public class FileReader {
     private int columnsNumber;
     private int rowsNumber;
     private String row;
-    private final String automat = "Automat: ";
-    private final String grid = "Grid:";
     private String gameType;
 
     public FileReader(String fileName) throws FileNotFoundException {
@@ -37,7 +35,7 @@ public class FileReader {
     }
 
     public String getGameType() throws NoSuchElementException {
-        sc.skip(automat);
+        sc.skip("Automat: ");
         gameType = "Core." + sc.nextLine();
         return gameType;
     }
@@ -69,7 +67,7 @@ public class FileReader {
     }
 
     public void getGridLayout(CellularAutomaton ca) throws NoSuchElementException {
-        sc.skip(grid);
+        sc.skip("Grid:");
         sc.nextLine();
         for (int i = 1; i < rowsNumber + 1; i++) {
             for (int j = 1; j < columnsNumber + 1; j++) {
