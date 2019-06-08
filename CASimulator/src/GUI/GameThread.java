@@ -29,14 +29,25 @@ public class GameThread extends Thread {
     @Override
     public void run() {
         int iterations = 0;
-        while (flag && threadAutomaton.isIsGridChanging() && iterations < countGenerations) {
-            threadAutomaton.generate();
-            try {
-                Thread.sleep(intervalTime);
-            } catch (InterruptedException ex) {
+        if (countGenerations == 0) {
+            while (flag && threadAutomaton.isIsGridChanging()) {
+                threadAutomaton.generate();
+                try {
+                    Thread.sleep(intervalTime);
+                } catch (InterruptedException ex) {
 
+                }
             }
-            iterations++;
+        } else {
+            while (flag && threadAutomaton.isIsGridChanging() && iterations < countGenerations) {
+                threadAutomaton.generate();
+                try {
+                    Thread.sleep(intervalTime);
+                } catch (InterruptedException ex) {
+
+                }
+                iterations++;
+            }
         }
         threadAutomaton.setIsGridChanging(true);
     }
