@@ -82,23 +82,13 @@ public abstract class CellularAutomaton implements Observable {
         }
         observers.toString();
     }
-    
+
     public void isGridChanging() {
-//        for (int i = 1; i < mainGrid.getHeight() - 1; i++) {
-//            for (int j = 1; j < mainGrid.getWidth() - 1; j++) {
-//                if (mainGrid.getGameGridCell(i, j) != utilGrid.getGameGridCell(i, j)) {
-//                    
-//                } else {
-//
-//                }
-//            }
-//        }
-        
-       if(Arrays.deepEquals(mainGrid.getGameGrid(), utilGrid.getGameGrid())){
-           this.setIsGridChanging(false);
-       } else {
-           this.setIsGridChanging(true);
-       }
+        if (Arrays.deepEquals(mainGrid.getGameGrid(), utilGrid.getGameGrid())) {
+            this.setIsGridChanging(false);
+        } else {
+            this.setIsGridChanging(true);
+        }
     }
 
     protected void printToScreen() {
