@@ -83,7 +83,7 @@ public abstract class CellularAutomaton implements Observable {
         observers.toString();
     }
 
-    public void isGridChanging() {
+    public void checkGrid() {
         if (Arrays.deepEquals(mainGrid.getGameGrid(), utilGrid.getGameGrid())) {
             this.setIsGridChanging(false);
         } else {
