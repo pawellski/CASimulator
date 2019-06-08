@@ -13,13 +13,8 @@ import Grid.Cell;
  */
 public class GameOfLife extends CellularAutomaton {
 
-    
     public GameOfLife(int hei, int wi) {
         super(hei, wi);
-    }
-
-    public GameOfLife(Cell[][] grid) {
-        super(grid);
     }
 
     @Override
@@ -37,7 +32,7 @@ public class GameOfLife extends CellularAutomaton {
     }
 
     @Override
-    public Cell cellState(int i, int j) {
+    protected Cell cellState(int i, int j) {
         int aliveNumber = 0;
         for (int a = -1; a < 2; a++) {
             for (int b = -1; b < 2; b++) {
@@ -63,14 +58,12 @@ public class GameOfLife extends CellularAutomaton {
     }
 
     @Override
-    public void clearGrid(Cell[][] gridToClear) {
+    protected void clearGrid(Cell[][] gridToClear) {
         for (int i = 0; i < gridToClear.length; i++) {
             for (int j = 0; j < gridToClear[i].length; j++) {
                 gridToClear[i][j] = Cell.DEAD;
             }
         }
     }
-
-   
 
 }
