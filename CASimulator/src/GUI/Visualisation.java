@@ -34,8 +34,6 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
     private Grid clipboardGrid;
 
-    private String fileName;
-
     Graphics paintGrid;
     Image mainImage;
 
@@ -669,8 +667,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private void jButtonFilePathMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFilePathMouseClicked
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            fileName = fc.getSelectedFile().getAbsolutePath();
-            jTextFieldFileName.setText(fileName);
+            jTextFieldFileName.setText(fc.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_jButtonFilePathMouseClicked
 
