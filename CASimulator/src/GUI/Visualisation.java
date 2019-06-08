@@ -609,7 +609,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
             }
             onUpdate();
         } catch (NullPointerException e) {
-            System.err.println("Aktualnie w schowku nie ma planszy!");
+            JOptionPane.showMessageDialog(null, "There is currently no grid in the clipboard!", "Clipboard warning", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButtonPasteGridMouseClicked
 
