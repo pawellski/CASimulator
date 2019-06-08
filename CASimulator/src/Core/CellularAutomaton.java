@@ -9,6 +9,7 @@ import GUI.Observator;
 import Grid.Cell;
 import Grid.Grid;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -18,7 +19,7 @@ public abstract class CellularAutomaton implements Observable {
 
     protected Grid mainGrid;
     protected Grid utilGrid;
-    protected Grid utilCopyGrid;
+    private boolean isGridChanging = true;
 
     private ArrayList<Observator> observers;
 
@@ -82,17 +83,22 @@ public abstract class CellularAutomaton implements Observable {
         observers.toString();
     }
     
-    public boolean isGridChanging() {
-        for (int i = 1; i < mainGrid.getHeight() - 1; i++) {
-            for (int j = 1; j < mainGrid.getWidth() - 1; j++) {
-                if (mainGrid.getGameGridCell(i, j) != utilGrid.getGameGridCell(i, j)) {
-                    return true;
-                } else {
-
-                }
-            }
-        }
-        return false;
+    public void isGridChanging() {
+//        for (int i = 1; i < mainGrid.getHeight() - 1; i++) {
+//            for (int j = 1; j < mainGrid.getWidth() - 1; j++) {
+//                if (mainGrid.getGameGridCell(i, j) != utilGrid.getGameGridCell(i, j)) {
+//                    
+//                } else {
+//
+//                }
+//            }
+//        }
+        
+       if(Arrays.deepEquals(mainGrid.getGameGrid(), utilGrid.getGameGrid())){
+           this.setIsGridChanging(false);
+       } else {
+           this.setIsGridChanging(true);
+       }
     }
 
     protected void printToScreen() {
@@ -109,6 +115,20 @@ public abstract class CellularAutomaton implements Observable {
     public abstract void generate();
 
     public abstract Cell cellState(int i, int j);
+
+    /**
+     * @return the isGridChanging
+     */
+    public boolean isIsGridChanging() {
+        return this.isGridChanging;
+    }
+
+    /**
+     * @param isGridChanging the isGridChanging to set
+     */
+    public void setIsGridChanging(boolean isGridChanging) {
+        this.isGridChanging = isGridChanging;
+    }
     
    
 }

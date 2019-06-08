@@ -30,9 +30,9 @@ public class GameOfLife extends CellularAutomaton {
             }
         }
         notifyObservator();
+        isGridChanging();
         clearGrid(mainGrid.getGameGrid());
         changeGrid();
-        isGridChanging();
         clearGrid(utilGrid.getGameGrid());
     }
 

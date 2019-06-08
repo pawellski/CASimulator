@@ -57,6 +57,7 @@ public class WireWorld extends CellularAutomaton {
             }
         }
         notifyObservator();
+        isGridChanging();
         clearGrid(mainGrid.getGameGrid());
         changeGrid();
         clearGrid(utilGrid.getGameGrid());

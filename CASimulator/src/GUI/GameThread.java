@@ -7,6 +7,7 @@ package GUI;
 
 import Core.CellularAutomaton;
 import Core.GameOfLife;
+import jdk.nashorn.internal.runtime.arrays.ArrayData;
 
 /**
  *
@@ -28,7 +29,7 @@ public class GameThread extends Thread {
     @Override
     public void run() {
         int iterations = 0;
-        while (flag && threadAutomaton.isGridChanging() && iterations < countGenerations) {
+        while (flag && threadAutomaton.isIsGridChanging() && iterations < countGenerations) {
             threadAutomaton.generate();
             try {
                 Thread.sleep(intervalTime);
@@ -36,7 +37,9 @@ public class GameThread extends Thread {
 
             }
             iterations++;
+            System.out.println(iterations + " generacja");
         }
+        threadAutomaton.setIsGridChanging(true);
     }
     
    
