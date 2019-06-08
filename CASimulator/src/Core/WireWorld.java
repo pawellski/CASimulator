@@ -17,12 +17,8 @@ public class WireWorld extends CellularAutomaton {
         super(hei, wi);
     }
 
-    public WireWorld(Cell[][] grid) {
-        super(grid);
-    }
-
     @Override
-    public Cell cellState(int i, int j) {
+    protected Cell cellState(int i, int j) {
         int electronHeadNumber = 0;
         switch (mainGrid.getGameGridCell(i, j)) {
             case EMPTY:
@@ -64,7 +60,7 @@ public class WireWorld extends CellularAutomaton {
     }
 
     @Override
-    public void clearGrid(Cell[][] gridToClear) {
+    protected void clearGrid(Cell[][] gridToClear) {
         for (int i = 0; i < gridToClear.length; i++) {
             for (int j = 0; j < gridToClear[i].length; j++) {
                 gridToClear[i][j] = Cell.EMPTY;
