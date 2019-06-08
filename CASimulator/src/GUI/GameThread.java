@@ -37,7 +37,6 @@ public class GameThread extends Thread {
 
             }
             iterations++;
-            System.out.println(iterations + " generacja");
         }
         threadAutomaton.setIsGridChanging(true);
     }
