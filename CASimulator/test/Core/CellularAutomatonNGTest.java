@@ -104,21 +104,4 @@ public class CellularAutomatonNGTest {
         assertFalse(instanceWW.isIsGridChanging());
     }
 
-    public class CellularAutomatonImpl extends CellularAutomaton {
-
-        public CellularAutomatonImpl() {
-            super(null);
-        }
-
-        public void clearGrid(Cell[][] gridToClear) {
-        }
-
-        public void generate() {
-        }
-
-        public Cell cellState(int i, int j) {
-            return null;
-        }
-    }
-
 }
