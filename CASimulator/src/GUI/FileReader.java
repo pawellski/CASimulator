@@ -34,26 +34,26 @@ public class FileReader {
         this.scRows = new Scanner(file);
     }
 
-    public String getGameType() throws NoSuchElementException {
+    private String getGameType() throws NoSuchElementException {
         sc.skip("Automat: ");
         gameType = "Core." + sc.nextLine();
         return gameType;
     }
 
-    public void setScannersInPlace() {
+    private void setScannersInPlace() {
         scColumns.nextLine();
         scColumns.nextLine();
         scRows.nextLine();
         scRows.nextLine();
     }
 
-    public int countNumberOfColumns() {
+    private int countNumberOfColumns() {
         row = scColumns.nextLine();
         columnsNumber = row.replace(" ", "").length();
         return columnsNumber;
     }
 
-    public int countNumberOfRows() {
+    private int countNumberOfRows() {
         while (!(scRows.hasNext("/grid"))) {
             rowsNumber++;
             scRows.next();
@@ -61,12 +61,12 @@ public class FileReader {
         return rowsNumber / columnsNumber;
     }
 
-    public void getDimensions() {
+    private void getDimensions() {
         columnsNumber = countNumberOfColumns();
         rowsNumber = countNumberOfRows();
     }
 
-    public void getGridLayout(CellularAutomaton ca) throws NoSuchElementException {
+    private void getGridLayout(CellularAutomaton ca) throws NoSuchElementException {
         sc.skip("Grid:");
         sc.nextLine();
         for (int i = 1; i < rowsNumber + 1; i++) {
