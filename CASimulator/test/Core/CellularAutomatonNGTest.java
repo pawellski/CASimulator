@@ -52,8 +52,15 @@ public class CellularAutomatonNGTest {
         System.out.println("resizeGameGrid");
         int hei = 10;
         int wi = 10;
+        
         instanceWW.resizeGameGrid(hei, wi);
         assertTrue((instanceWW.mainGrid.getHeight() == hei) && (instanceWW.mainGrid.getWidth() == wi));
+        
+        hei = 4;
+        wi = 5;
+        
+        instanceGOL.resizeGameGrid(hei, wi);
+        assertTrue((instanceGOL.mainGrid.getHeight() == hei) && (instanceGOL.mainGrid.getWidth() == wi));
     }
 
     /**
@@ -74,6 +81,19 @@ public class CellularAutomatonNGTest {
         }
         instanceWW.changeGrid();
         assertTrue(Arrays.deepEquals(instanceWW.mainGrid.getGameGrid(), instanceWW.utilGrid.getGameGrid()));
+        
+        for (int i = 0; i < instanceGOL.mainGrid.getHeight() - 1; i++) {
+            for (int j = 0; j < instanceGOL.mainGrid.getWidth() - 1; j++) {
+                instanceGOL.mainGrid.setGameGridCell(i, j, Cell.ALIVE);
+            }
+        }
+        for (int i = 0; i < instanceGOL.utilGrid.getHeight() - 1; i++) {
+            for (int j = 0; j < instanceGOL.utilGrid.getWidth() - 1; j++) {
+                instanceGOL.utilGrid.setGameGridCell(i, j, Cell.DEAD);
+            }
+        }
+        instanceGOL.changeGrid();
+        assertTrue(Arrays.deepEquals(instanceGOL.mainGrid.getGameGrid(), instanceGOL.utilGrid.getGameGrid()));
 
     }
 
@@ -95,6 +115,7 @@ public class CellularAutomatonNGTest {
         }
         instanceWW.checkGrid();
         assertTrue(instanceWW.isIsGridChanging());
+        
         for (int i = 0; i < instanceWW.utilGrid.getHeight(); i++) {
             for (int j = 0; j < instanceWW.utilGrid.getWidth(); j++) {
                 instanceWW.utilGrid.setGameGridCell(i, j, Cell.WIRE);
@@ -102,6 +123,27 @@ public class CellularAutomatonNGTest {
         }
         instanceWW.checkGrid();
         assertFalse(instanceWW.isIsGridChanging());
+        
+        for (int i = 0; i < instanceGOL.mainGrid.getHeight(); i++) {
+            for (int j = 0; j < instanceGOL.mainGrid.getWidth(); j++) {
+                instanceGOL.mainGrid.setGameGridCell(i, j, Cell.DEAD);
+            }
+        }
+        for (int i = 0; i < instanceGOL.utilGrid.getHeight(); i++) {
+            for (int j = 0; j < instanceGOL.utilGrid.getWidth(); j++) {
+                instanceGOL.utilGrid.setGameGridCell(i, j, Cell.ALIVE);
+            }
+        }
+        instanceGOL.checkGrid();
+        assertTrue(instanceGOL.isIsGridChanging());
+        
+        for (int i = 0; i < instanceGOL.utilGrid.getHeight(); i++) {
+            for (int j = 0; j < instanceGOL.utilGrid.getWidth(); j++) {
+                instanceGOL.utilGrid.setGameGridCell(i, j, Cell.DEAD);
+            }
+        }
+        instanceGOL.checkGrid();
+        assertFalse(instanceGOL.isIsGridChanging());
     }
 
 }
