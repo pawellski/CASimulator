@@ -293,7 +293,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         });
 
         jButtonRun.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonRun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/play.png"))); // NOI18N
+        jButtonRun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/play.png"))); // NOI18N
         jButtonRun.setPreferredSize(new java.awt.Dimension(60, 35));
         jButtonRun.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -302,7 +302,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         });
 
         jButtonPause.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/pause.png"))); // NOI18N
+        jButtonPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/pause.png"))); // NOI18N
         jButtonPause.setToolTipText("");
         jButtonPause.setPreferredSize(new java.awt.Dimension(60, 35));
         jButtonPause.addActionListener(new java.awt.event.ActionListener() {
@@ -313,7 +313,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
 
         jButtonOneStep.setBackground(new java.awt.Color(255, 255, 255));
         jButtonOneStep.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonOneStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/skip.png"))); // NOI18N
+        jButtonOneStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/skip.png"))); // NOI18N
         jButtonOneStep.setPreferredSize(new java.awt.Dimension(60, 35));
         jButtonOneStep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
