@@ -56,8 +56,8 @@ public class CellularAutomatonNGTest {
         instanceWW.resizeGameGrid(hei, wi);
         assertTrue((instanceWW.mainGrid.getHeight() == hei) && (instanceWW.mainGrid.getWidth() == wi));
         
-        hei = 4;
-        wi = 5;
+        hei = 1;
+        wi = 1;
         
         instanceGOL.resizeGameGrid(hei, wi);
         assertTrue((instanceGOL.mainGrid.getHeight() == hei) && (instanceGOL.mainGrid.getWidth() == wi));
@@ -101,7 +101,7 @@ public class CellularAutomatonNGTest {
      * Test of isGridChanging method, of class CellularAutomaton.
      */
     @Test
-    public void testIsGridChanging() {
+    public void testcheckGrid() {
         System.out.println("isGridChanging");
         for (int i = 0; i < instanceWW.mainGrid.getHeight(); i++) {
             for (int j = 0; j < instanceWW.mainGrid.getWidth(); j++) {
