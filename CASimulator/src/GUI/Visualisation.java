@@ -625,7 +625,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
     private void jButtonLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoadMouseClicked
 
         try {
-            FileReader fr = new FileReader(jTextFieldFileName.getText());
+            ReadFile fr = new ReadFile(jTextFieldFileName.getText());
             fr.readFile(this.currentGame);
             onUpdate();
         } catch (FileNotFoundException ex) {
@@ -638,7 +638,7 @@ public class Visualisation extends javax.swing.JFrame implements Observator {
         JFileChooser fc = new JFileChooser();
         if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             try {
-                SaveFileWriter sfw = new SaveFileWriter(fc.getSelectedFile().getPath());
+                WriteFile sfw = new WriteFile(fc.getSelectedFile().getPath());
                 sfw.writeFile(this.currentGame);
             } catch (IOException ex) {
 
